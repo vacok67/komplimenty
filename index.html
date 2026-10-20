@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Генератор комплиментов 😊</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-size: 200% 200%;
+    animation: gradient 8s ease infinite;
+    padding: 20px;
+  }
+
+  @keyframes gradient {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    padding: 40px 30px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: pop 0.5s ease;
+  }
+
+  @keyframes pop {
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  .emoji {
+    font-size: 70px;
+    display: block;
+    margin-bottom: 16px;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-12px); }
+  }
+
+  h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 28px;
+  }
+
+  .compliment {
+    font-size: 20px;
+    line-height: 1.5;
+    color: #444;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: #f5f3ff;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    transition: all 0.3s;
+  }
+
+  .compliment.changed {
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    transition: all 0.2s;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(102, 126, 234, 0.6);
+  }
+
+  button:active {
+    transform: translateY(0) scale(0.96);
+  }
+
+  .counter {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #999;
+  }
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <span class="emoji" id="emoji">😊</span>
+    <h1>Генератор комплиментов</h1>
+    <p class="subtitle">Нажми кнопку — получи приятность</p>
+
+    <div class="compliment" id="compliment">
+      Нажми на кнопку ниже 👇
+    </div>
+
+    <button onclick="generate()">✨ Получить комплимент</button>
+
+    <p class="counter" id="counter">Комплиментов получено: 0</p>
+  </div>
+
+<script>
+  const compliments = [
+    "У тебя отличный вкус — ты же открыл этот сайт! 😎",
+    "Ты сегодня выглядишь лучше, чем вчера. А вчера ты был(а) огонь! 🔥",
+    "Твоя улыбка способна зарядить телефон. Проверено! ⚡",
+    "Ты умнее, чем средний поисковик. И это не шутка. 🧠",
+    "Если бы существовала премия «Лучший человек», ты был(а) бы в шорт-листе. 🏆",
+    "Ты — причина, по которой у кого-то сегодня хороший день. 💛",
+    "Твоя энергия заразительна. В хорошем смысле! 🌟",
+    "Ты справляешься лучше, чем тебе кажется. Честно. 💪",
+    "Ты — как утренний кофе: бодришь и делаешь мир лучше. ☕",
+    "У тебя отличное чувство юмора — ты же нажал(а) на эту кнопку! 😄",
+    "Мир стал чуть лучше, потому что в нём есть ты. 🌍",
+    "Ты не просто хорош(а) — ты отличный пример для подражания. 👏",
+    "Твоя настойчивость впечатляет. Ты дошёл(ла) до сюда! 🚀",
+    "Ты — тот самый человек, с которым хочется дружить. 🤝",
+    "Ты выглядишь так, будто у тебя всё под контролем. И это правда! 🎯"
+  ];
+
+  const emojis = ["😊", "🌟", "🔥", "💛", "🎉", "🚀", "😎", "🏆", "☕", "💪"];
+  let count = 0;
+
+  function generate() {
+    const randomIndex = Math.floor(Math.random() * compliments.length);
+    const randomEmoji = Math.floor(Math.random() * emojis.length);
+
+    const box = document.getElementById('compliment');
+    box.textContent = compliments[randomIndex];
+    box.classList.remove('changed');
+    void box.offsetWidth; // перезапуск анимации
+    box.classList.add('changed');
+
+    document.getElementById('emoji').textContent = emojis[randomEmoji];
+
+    count++;
+    document.getElementById('counter').textContent = 'Комплиментов получено: ' + count;
+  }
+</script>
+</body>
+</html>
